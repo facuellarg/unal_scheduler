@@ -1,5 +1,6 @@
 .panel-container{
     display: grid;
+    /* grid-row-gap: 0; */
     grid-template-columns: repeat(7, 13%);
     grid-gap: 10px;
     grid-auto-rows: minmax(100px, auto);
@@ -9,4 +10,7 @@
     background-position: center;
     background-size: cover;
     /* background-size: contain; */
+}
+.rectangle{
+    
 }

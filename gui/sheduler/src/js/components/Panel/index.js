@@ -26,6 +26,10 @@ const Panel =(props)=>{
       })
       return {'min':min,'max':max}
     }
+    const gradient = (<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style={{stopColor:'rgb(100,100,100)',stopOpacity:.8}} />
+                      <stop offset="100%" style={{stopColor:'rgb(180,180,180)',stopOpacity:.5}} />
+                    </linearGradient>)
 
     const jsUcfirst= (string) => {return(string.charAt(0).toUpperCase() + string.slice(1))}
     const normalize = word=> word.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -35,12 +39,17 @@ const Panel =(props)=>{
     
     return(
         <div className={'panel-container'} style={{gridTemplateRows: `repeat(${rows+1}, auto)`}}>
-          <HeaderCell day={'Hora'}></HeaderCell>
-          {days.map( (day,key)=>
-            <HeaderCell day={jsUcfirst(day)} key={key}></HeaderCell>
+           <svg style={{height:'100%',width:"100%",gridRow:`1 / span ${rows+1}`, gridColumn:1,margin:0,padding:0}}>
+              {gradient}
+              <rect className={'rectangle'} width="100%" height="100%" style={{fill:`url(#${gradient.props['id']})`}}  />
+          </svg>
+          <HeaderCell day={'Hora'}  style={{gridColumn:1, gridRow:1}}></HeaderCell>
+          {days.map( (day,key)=>{
+            return(
+            <HeaderCell day={jsUcfirst(day)} style={{gridColumn:key+2}} key={key}></HeaderCell>)}
           )}
+       
           {[...Array(rows).keys()].map( (val,key)=>{
-          
           return(
             <HeaderCell day={parseInt(min)+val} 
                         key={key}
@@ -50,6 +59,7 @@ const Panel =(props)=>{
                         </HeaderCell>
           )
           })}
+             
         {Object.keys(horario).map( (code) =>{
             return(
                 Object.keys(horario[code]).map( (day,key)=>{
@@ -58,7 +68,6 @@ const Panel =(props)=>{
                   const start_hour = parseInt(hour[0].split(':')[0])
                   const end_hour = parseInt(hour[1].split(':')[0])
                   const size = end_hour-start_hour
-                  console.log(start_hour-min+1)
                   return(
                     <Cell key={key}
                     name={name}
