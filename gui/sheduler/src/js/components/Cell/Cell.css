@@ -1,7 +1,8 @@
 .cell-container{
     height: 100%;
-    max-width: 15%;
+    max-width: 100%;
     background: rgb(219,219,219);
     background: linear-gradient(180deg, rgba(219,219,219,0.8631827731092436) 0%, rgba(177,170,170,1) 64%);
     text-align: center;
+    border: 1px solid;
 }

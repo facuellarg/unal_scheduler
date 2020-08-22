@@ -1,9 +1,10 @@
 import React from 'react';
 import './Cell.css'
 const Cell = (props) =>{
-    const{group, professor, name, classroom}=props;
+    const{group, professor, name, classroom,style}=props;
+    console.log(style)
     return(
-        <div className={"cell-container"}>
+        <div className={"cell-container item"} style={style}>
             <span className={'name'}>{name}</span><br/>
             <span className={'professor'}>{professor}</span><br/>
             <span className={'classroom'}>Salon:{classroom}</span><br/>
