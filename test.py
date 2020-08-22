@@ -14,8 +14,6 @@ import argparse
 driver = webdriver.Chrome(ChromeDriverManager().install())
 login_url='https://sia.unal.edu.co/ServiciosApp'
 driver.get(login_url)   
-user = 'facuellarg'
-password = 'Garcia51'
 HOUR = 2
 CLASSROOM = 3
 GROUP=10
