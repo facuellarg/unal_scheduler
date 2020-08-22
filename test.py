@@ -8,6 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import json
 import re
+import argparse
 # op = webdriver.ChromeOptions()
 # op.add_argument('headless')
 driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -77,85 +78,84 @@ def update_course(old_course, new_course):
             continue
         old_course[k]=new_course[k]
     return old_course
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u','--user',help="Su usuario unal",type=str)
+    parser.add_argument('-p','--password', help='Su contraseña', type=str)
+    args = parser.parse_args()
+    login_sia(driver, args.user, args.password)
+    go_to_horario(driver)
 
-login_sia(driver, user, password)
-go_to_horario(driver)
-
-go_to_list(driver)
+    go_to_list(driver)
 
 
-item = WebDriverWait(driver, 20).until(
-    EC.presence_of_element_located((By.XPATH,'//tr[contains(@class,"af_calendar_list-row")]'))
-)
-info_courses={}
-courses_len = len(driver.find_elements(By.XPATH,'//tr[contains(@class,"af_calendar_list-row")]'))
-current_day = ""
-for i in range(courses_len):
-    load = False
-    tries = 0
-    while not load:
-        tries +=1
-        if tries > 10:
-            driver.refresh()
-            go_to_horario(driver)
-            go_to_list(driver,1)
-        courses = driver.find_elements(By.XPATH,'//tr[contains(@class,"af_calendar_list-row")]')
-        course = courses[i]
-        day = course.find_elements(By.XPATH,'.//th[@class="af_calendar_list-day-of-week-column af_calendar_list-cell"]')
-        if len(day) !=0:
-            current_day = day[0].text.strip()
+    item = WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.XPATH,'//tr[contains(@class,"af_calendar_list-row")]'))
+    )
+    info_courses={}
+    courses_len = len(driver.find_elements(By.XPATH,'//tr[contains(@class,"af_calendar_list-row")]'))
+    current_day = ""
+    for i in range(courses_len):
+        load = False
+        tries = 0
+        while not load:
+            tries +=1
+            if tries > 10:
+                driver.refresh()
+                go_to_horario(driver)
+                go_to_list(driver,1)
+                tries = 0
+                continue
+            courses = driver.find_elements(By.XPATH,'//tr[contains(@class,"af_calendar_list-row")]')
+            course = courses[i]
+            day = course.find_elements(By.XPATH,'.//th[@class="af_calendar_list-day-of-week-column af_calendar_list-cell"]')
+            if len(day) !=0:
+                current_day = day[0].text.strip()
 
-        courses = driver.find_elements(By.XPATH,'//a[contains(@class,"af_calendar_list-title-link")]')
-        course = courses[i]
-        course.click()
+            courses = driver.find_elements(By.XPATH,'//a[contains(@class,"af_calendar_list-title-link")]')
+            course = courses[i]
+            course.click()
 
-        time.sleep(2)
-        container = WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.XPATH,'//div[@data-afr-fid="f1"]'))
-        )
-        name =None
-        try:
-            name = container.find_element(By.XPATH,'.//div[@class="af_dialog_title"]')
-        except:
-            continue
-        if name!= None:
-            spans = container.find_elements(By.XPATH, './/td[@class="af_dialog_content"]//span')
-            i = 0
-            professor = None
-            if len(spans)>11:
-                professor = spans[PROFESSOR].text
-            hour = clear_hour(spans[HOUR].text)
-            classroom = clear_classroom(spans[CLASSROOM].text)
-            group = clear_group(spans[GROUP].text)
-            name_splited = name.text.split(' ')
-            code = name_splited[0]
-            name_course = ' '.join(name_splited[1:])
-            info_course =   {'name':name_course,
-                            'hour':hour,
-                            'group':group,
-                            'classroom':classroom,
-                            'professor':professor}
-            if code not in info_courses.keys():
-                info_courses[code]={}
-            if current_day in info_courses[code].keys():
-                info_courses[code][current_day] = update_course( info_courses[code][current_day],info_course)
-            else:
-                info_courses[code][current_day]=info_course
-        button = WebDriverWait(container,20).until(
-            EC.presence_of_element_located((By.XPATH, '//button[@class="af_dialog_footer-button-affirmative af_dialog_footer-button p_AFTextOnly"]'))
-        )
-        try:
-            button.click()
-        except:
-            continue
-        load = True
+            time.sleep(2)
+            container = WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.XPATH,'//div[@data-afr-fid="f1"]'))
+            )
+            name =None
+            try:
+                name = container.find_element(By.XPATH,'.//div[@class="af_dialog_title"]')
+            except:
+                continue
+            if name!= None:
+                spans = container.find_elements(By.XPATH, './/td[@class="af_dialog_content"]//span')
+                i = 0
+                professor = None
+                if len(spans)>11:
+                    professor = spans[PROFESSOR].text
+                hour = clear_hour(spans[HOUR].text)
+                classroom = clear_classroom(spans[CLASSROOM].text)
+                group = clear_group(spans[GROUP].text)
+                name_splited = name.text.split(' ')
+                code = name_splited[0]
+                name_course = ' '.join(name_splited[1:])
+                info_course =   {'name':name_course,
+                                'hour':hour,
+                                'group':group,
+                                'classroom':classroom,
+                                'professor':professor}
+                if code not in info_courses.keys():
+                    info_courses[code]={}
+                if current_day in info_courses[code].keys():
+                    info_courses[code][current_day] = update_course( info_courses[code][current_day],info_course)
+                else:
+                    info_courses[code][current_day]=info_course
+            button = WebDriverWait(container,20).until(
+                EC.presence_of_element_located((By.XPATH, '//button[@class="af_dialog_footer-button-affirmative af_dialog_footer-button p_AFTextOnly"]'))
+            )
+            try:
+                button.click()
+            except:
+                continue
+            load = True
 
-with open("horarios.json","w") as f:
-    json.dump(info_courses, f, indent=2)
-# af_calendar_list-cell p_AFStretched
-# AFZOrderLayerContainer data-afr-fid="f1"
-# af_dialog_footer-button-affirmative af_dialog_footer-button p_AFTextOnly
-# af_calendar_list-row 
-# af_calendar_list-day-of-week-column af_calendar_list-cell
-
-# af_dialog_content
+    with open("horarios.json","w") as f:
+        json.dump(info_courses, f, indent=2)
