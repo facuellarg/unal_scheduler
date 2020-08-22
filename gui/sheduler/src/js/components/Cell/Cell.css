@@ -5,4 +5,9 @@
     background: linear-gradient(180deg, rgba(219,219,219,0.8631827731092436) 0%, rgba(177,170,170,1) 64%);
     text-align: center;
     border: 1px solid;
+    border-style: groove;
+    border-radius: 30px 5px 30px 5px;
+    -webkit-box-shadow: 16px -8px 25px -9px rgba(0,0,0,0.75);
+    -moz-box-shadow: 16px -8px 25px -9px rgba(0,0,0,0.75);
+    box-shadow: 16px -8px 25px -9px rgba(0,0,0,0.75);
 }
