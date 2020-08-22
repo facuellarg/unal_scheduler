@@ -47,7 +47,6 @@ const Panel =(props)=>{
                         style={{gridRow:`${val+2}`,
                                 gridColumn:1,
                                 }}>
-
                         </HeaderCell>
           )
           })}
@@ -65,7 +64,8 @@ const Panel =(props)=>{
                     name={name}
                     group={group}
                     professor={professor}
-                    classroom={classroom}
+                    classroom={`${classroom[0]}-${classroom[1]}`}
+                    hour={`${hour[0]}-${hour[1]}`}
                     style={{
                             gridColumn:column,
                             gridRow:`${start_hour-min+2} / span ${size}`,

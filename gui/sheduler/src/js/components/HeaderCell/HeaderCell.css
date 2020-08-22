@@ -4,5 +4,6 @@
         background: linear-gradient(180deg, rgba(219,219,219,0.1) 0%, rgba(177,170,170,0.4) 64%);
         text-align: center;
         /* border: 1px solid; */
-        color:white
+        color:white;
+        border-bottom: 2px solid  rgba(219,219,219,0.9);
 }
