@@ -10,4 +10,7 @@
     -webkit-box-shadow: 16px -8px 25px -9px rgba(0,0,0,0.75);
     -moz-box-shadow: 16px -8px 25px -9px rgba(0,0,0,0.75);
     box-shadow: 16px -8px 25px -9px rgba(0,0,0,0.75);
+    padding:0px;
+    /* margin: 5px; */
+
 }
