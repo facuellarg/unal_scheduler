@@ -7,7 +7,7 @@ const App=()=> {
   return (
     <div>
     {/* <Panel horario={horario}></Panel> */}
-    <WelcomPage name={"Pepito"}></WelcomPage>
+    <WelcomPage></WelcomPage>
     </div>
     
   // <Cell 

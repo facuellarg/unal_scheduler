@@ -5,7 +5,6 @@
     grid-gap: 0px 0px;
     max-width: 1000px;
     min-height: 500px;
-    min-height: 500px;
     grid-auto-rows: minmax(100px, auto);
     background-image: url("./../../../images/background.jpg");
     background-repeat: no-repeat, repeat;
