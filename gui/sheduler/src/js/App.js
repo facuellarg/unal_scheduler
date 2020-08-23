@@ -1,6 +1,5 @@
 import React from 'react';
-import Panel from './components/Panel'
-// import horario from './../data/horarios.json'
+import './../css/App.css'
 import WelcomPage from './components/WelcomePage'
 // import 'resize-observer-polyfill/dist/ResizeObserver.global';
 const App=()=> {

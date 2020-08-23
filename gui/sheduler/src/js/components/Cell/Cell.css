@@ -1,16 +1,16 @@
 .cell-container{
     height: 100%;
     max-width: 100%;
-    background: rgb(219,219,219);
-    background: linear-gradient(180deg, rgba(219,219,219,0.8631827731092436) 0%, rgba(177,170,170,1) 64%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    /* background: rgb(219,219,219); */
+    /* background: linear-gradient(180deg, rgba(219,219,219,0.8631827731092436) 0%, rgba(177,170,170,0.3) 64%); */
     text-align: center;
-    border: 1px solid;
-    border-style: groove;
-    border-radius: 30px 5px 30px 5px;
-    -webkit-box-shadow: 16px -8px 25px -9px rgba(0,0,0,0.75);
-    -moz-box-shadow: 16px -8px 25px -9px rgba(0,0,0,0.75);
-    box-shadow: 16px -8px 25px -9px rgba(0,0,0,0.75);
-    padding:0px;
+    -webkit-box-shadow: 6px -4px 5px 0px rgba(0,0,0,0.18);
+-moz-box-shadow: 6px -4px 5px 0px rgba(0,0,0,0.18);
+box-shadow: 6px -4px 5px 0px rgba(0,0,0,0.18)
+    /* padding:0px; */
     /* margin: 5px; */
 
 }

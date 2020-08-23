@@ -31,17 +31,36 @@ const useWindowDimensions =()=> {
   return windowDimensions;
 }
 
-const Panel =(props)=>{
-  const {horario} = props
-  const days =['lunes','martes','miercoles','jueves','viernes','sabado']
-  const { height, width } = useWindowDimensions();
 
-  const get_hour_interval=(horario)=>{
+const get_color_schedule = (schedule,color_course)=>{
+  Object.keys(schedule).map( code =>{
+    let color = schedule[code]['color']
+    color_course[code] = color
+    delete schedule[code]['color']
+  })
+  return color_course
+
+}
+
+const percentage_to_hex = number=>{
+  number =  Math.round((255*number))
+  return number.toString(16).toUpperCase();
+}
+
+
+const Panel =(props)=>{
+  const {schedule} = props
+  const days =['lunes','martes','miercoles','jueves','viernes','sabado']
+  const { width } = useWindowDimensions();
+  let color_course={};
+  let schedule_copy = JSON.parse(JSON.stringify(schedule))
+  const get_hour_interval=(schedule)=>{
       let max = 0
       let min = 25 
-      Object.keys(horario).map( code=>{
-        Object.keys(horario[code]).map( day=>{
-          let hour = horario[code][day]['hour']
+      Object.keys(schedule).map( code=>{
+        Object.keys(schedule[code]).map( day=>{
+      
+          let hour = schedule[code][day]['hour']
           let start_hour = hour[0].split(':')[0]
           let end_hour = hour[1].split(':')[0]
           if( min > start_hour){
@@ -72,12 +91,14 @@ const Panel =(props)=>{
 
     const jsUcfirst= (string) => {return(string.charAt(0).toUpperCase() + string.slice(1))}
     const normalize = word=> word.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    const {min, max} = get_hour_interval(horario)
+    color_course = get_color_schedule(schedule_copy,color_course)
+    const {min, max} = get_hour_interval(schedule_copy)
     const rows = (max - min)
-
+    
     
     return(
         <div className={'panel-container'} style={{gridTemplateRows: `repeat(${rows+1}, auto)`}}>
+          {/* Columna de horas */}
            <svg style={{height:'100%',width:"100%",gridRow:`1 / span ${rows+1}`, gridColumn:1,margin:0,padding:0}}>
               {gradient_day}
               {gradient_time}
@@ -85,7 +106,7 @@ const Panel =(props)=>{
           </svg>
           <HeaderCell day={'Hora'}  style={{gridColumn:1, gridRow:1}}></HeaderCell>
           
-          
+          {/* Fila de  dias  */}
           {days.map( (day,key)=>{
             return(
               <svg key={key} style={{height:'100%',width:"100%",gridRow:`1 / span ${rows+1}`, gridColumn:key+2,margin:0,padding:0}}>
@@ -98,7 +119,7 @@ const Panel =(props)=>{
             <HeaderCell day={jsUcfirst(day)} style={{gridRow:1,gridColumn:key+2}} key={key}></HeaderCell>)}
           )}
 
-        
+        {/* las horas */}
           {[...Array(rows).keys()].map( (val,key)=>{
           return(
             <HeaderCell day={parseInt(min)+val} 
@@ -116,11 +137,12 @@ const Panel =(props)=>{
           </svg>
           )
           })}
-             
-        {Object.keys(horario).map( (code) =>{
+        {/* Informacion de las materias */}
+        {Object.keys(schedule_copy).map( (code) =>{
             return(
-                Object.keys(horario[code]).map( (day,key)=>{
-                  const{name,group,classroom,professor,hour} =horario[code][day]
+                Object.keys(schedule_copy[code]).map( (day,key)=>{
+                
+                  const{name,group,classroom,professor,hour} =schedule_copy[code][day]
                   const column = days.findIndex(element=>element === normalize(day))+2
                   const start_hour = parseInt(hour[0].split(':')[0])
                   const end_hour = parseInt(hour[1].split(':')[0])
@@ -132,7 +154,10 @@ const Panel =(props)=>{
                     professor={professor}
                     classroom={`${classroom[0]}-${classroom[1]}`}
                     hour={`${hour[0]}-${hour[1]}`}
+                    color={`${color_course[code]}`}
+                    color_opacity={`${percentage_to_hex(.9)}`}
                     style={{
+                            
                             gridColumn:column,
                             gridRow:`${start_hour-min+2} / span ${size}`,
                           }}>
@@ -143,7 +168,8 @@ const Panel =(props)=>{
                 )
             )
         })
-          }
+        }
+        {/*Separador TODO:Cambiar estilos para diferencias*/}
           <svg style={{marginBottom:"3%",gridColumn:"1 / span 7", gridRow:1}} height="100%" width="100%" >
             <line x1="0" y1="100%" x2={width} y2="100%" style={{ stroke:"rgba(219,219,219,0.9)",strokeWidth:2}} />
           </svg>
