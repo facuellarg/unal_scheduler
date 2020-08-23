@@ -2,7 +2,7 @@ import React ,{ useState, useEffect } from 'react';
 import Cell from './../Cell'
 import HeaderCell from './../HeaderCell'
 import './Panel.css'
-
+import image_background from './../../../images/background.jpg'
 
 
 
@@ -37,6 +37,7 @@ const get_color_schedule = (schedule,color_course)=>{
     let color = schedule[code]['color']
     color_course[code] = color
     delete schedule[code]['color']
+    return true
   })
   return color_course
 
@@ -49,7 +50,7 @@ const percentage_to_hex = number=>{
 
 
 const Panel =(props)=>{
-  const {schedule} = props
+  const {schedule,background} = props
   const days =['lunes','martes','miercoles','jueves','viernes','sabado']
   const { width } = useWindowDimensions();
   let color_course={};
@@ -94,10 +95,11 @@ const Panel =(props)=>{
     color_course = get_color_schedule(schedule_copy,color_course)
     const {min, max} = get_hour_interval(schedule_copy)
     const rows = (max - min)
-    
+
+    const backgroud_style = background ?{ backgroundImage: `url(${image_background})`} :{ backgroundColor:'black'}
     
     return(
-        <div className={'panel-container'} style={{gridTemplateRows: `repeat(${rows+1}, auto)`}}>
+        <div className={'panel-container'} style={{...{gridTemplateRows: `repeat(${rows+1}, auto)`},...backgroud_style}}>
           {/* Columna de horas */}
            <svg style={{height:'100%',width:"100%",gridRow:`1 / span ${rows+1}`, gridColumn:1,margin:0,padding:0}}>
               {gradient_day}

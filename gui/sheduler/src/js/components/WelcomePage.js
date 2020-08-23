@@ -3,7 +3,7 @@ import Panel from './Panel'
 import horario from './../../data/horario.json'
 import Loading from './Loading'
 import logo_unal from './../../images/logo_unal.png'
-
+import './WelcomePage.css'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -52,10 +52,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 const WelcomePage = (props)=>{
-    // const[schedule, set_schedule] = useState(horario);
     const classes = useStyles();
-    const[schedule, set_schedule] = useState(null);
+    const[schedule, set_schedule] = useState(horario);
+    // const[schedule, set_schedule] = useState(null);
     const[loading, set_loading] = useState(false);
+    const[show_background, set_show_background] = useState(false);
     const url ='http://127.0.0.1:5000/scheduler'
     let user,password;
     const on_click_test =(event)=>{
@@ -88,8 +89,10 @@ const WelcomePage = (props)=>{
         
             if (schedule){
                 return (
-               
-                <Panel schedule={schedule}></Panel>
+                    <div className='panel-container-w'> 
+                <button onClick={()=>set_show_background(!show_background)}>{show_background?'quitar fondo':'poner fondo'}</button>
+                    <Panel schedule={schedule} background={show_background}></Panel>
+                    </div>
                 
                 );
             }else{
@@ -134,7 +137,6 @@ const WelcomePage = (props)=>{
                         variant="contained"
                         color="primary"
                         onClick={on_click_test}
-                        //   className={classes.submit}
                         >
                         Cargar mi Horario
                         </Button>
