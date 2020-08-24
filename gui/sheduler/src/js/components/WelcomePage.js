@@ -52,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
 
 const WelcomePage = (props)=>{
     const classes = useStyles();
-    // const[schedule, set_schedule] = useState(horario);
     const[schedule, set_schedule] = useState(null);
     const[loading, set_loading] = useState(false);
     const[show_background, set_show_background] = useState(true);
