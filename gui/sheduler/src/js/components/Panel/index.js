@@ -50,7 +50,7 @@ const percentage_to_hex = number=>{
 
 
 const Panel =(props)=>{
-  const {schedule,background} = props
+  const {schedule,background,cell_colored} = props
   const days =['lunes','martes','miercoles','jueves','viernes','sabado']
   const { width } = useWindowDimensions();
   let color_course={};
@@ -158,6 +158,7 @@ const Panel =(props)=>{
                     hour={`${hour[0]}-${hour[1]}`}
                     color={`${color_course[code]}`}
                     color_opacity={`${percentage_to_hex(.9)}`}
+                    cell_colored={cell_colored}
                     style={{
                             
                             gridColumn:column,

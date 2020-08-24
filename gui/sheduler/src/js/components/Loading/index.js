@@ -49,7 +49,7 @@ const randomLoading= (list)=>{
 }
 const Loading = props=>{
     const {show} = props
-    console.log(show)
+
 if (show){
     return(
         <div className={'loading-container'}>

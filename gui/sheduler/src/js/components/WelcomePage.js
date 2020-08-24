@@ -1,6 +1,5 @@
 import React ,{useState}from 'react';
 import Panel from './Panel'
-import horario from './../../data/horario.json'
 import Loading from './Loading'
 import logo_unal from './../../images/logo_unal.png'
 import './WelcomePage.css'
@@ -53,45 +52,67 @@ const useStyles = makeStyles((theme) => ({
 
 const WelcomePage = (props)=>{
     const classes = useStyles();
-    const[schedule, set_schedule] = useState(horario);
-    // const[schedule, set_schedule] = useState(null);
+    // const[schedule, set_schedule] = useState(horario);
+    const[schedule, set_schedule] = useState(null);
     const[loading, set_loading] = useState(false);
-    const[show_background, set_show_background] = useState(false);
+    const[show_background, set_show_background] = useState(true);
+    const[cell_colored, set_cell_colored] = useState(true);
     const url ='http://127.0.0.1:5000/scheduler'
     let user,password;
     const on_click_test =(event)=>{
         event.stopPropagation();
         event.preventDefault();
-        set_loading(true)
-        fetch(`${url}?user=${user.value}&password=${password.value}`)
-        .then(res => {
-            
-            return(res.json())
-        })
-        .then(
-          (result) => {
-            if (result['status'] === 200){
-                set_schedule(result['data'])
+        if (user.value || password.vaue){
+          set_loading(true)
+          fetch(`${url}?user=${user.value}&password=${password.value}`)
+          .then(res => {
+              
+              return(res.json())
+          })
+          .then(
+            (result) => {
+              if (result['status'] === 200){
+                  set_schedule(result['data'])
+              }
+              set_loading(false)
+            },
+            // Nota: es importante manejar errores aquí y no en 
+            // un bloque catch() para que no interceptemos errores
+            // de errores reales en los componentes.
+            (error) => {
+              console.log(error)
+              set_loading(false)
             }
-            set_loading(false)
-          },
-          // Nota: es importante manejar errores aquí y no en 
-          // un bloque catch() para que no interceptemos errores
-          // de errores reales en los componentes.
-          (error) => {
-            console.log(error)
-            set_loading(false)
-          }
-        )
+          )
        
-    }
+        }
+      }
 
         
             if (schedule){
                 return (
                     <div className='panel-container-w'> 
-                <button onClick={()=>set_show_background(!show_background)}>{show_background?'quitar fondo':'poner fondo'}</button>
-                    <Panel schedule={schedule} background={show_background}></Panel>
+                {/* <button onClick={()=>set_show_background(!show_background)}>{show_background?'quitar fondo':'poner fondo'}</button> */}
+                      <Button
+                        disabled={loading}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        onClick={()=>set_show_background(!show_background)}
+                        >
+                        {show_background?'Quitar Fondo':'Poner Fondo'}
+                      </Button>
+                        <Button
+                          disabled={loading}
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          onClick={()=>set_cell_colored(!cell_colored)}
+                          >
+                        {cell_colored?'Quitar Color Celdas':'Poner color Celdas'}
+                        </Button>
+             
+                    <Panel schedule={schedule} background={show_background} cell_colored={cell_colored}></Panel>
                     </div>
                 
                 );
